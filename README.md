@@ -158,3 +158,141 @@ Pour la colonne id nous utiliserons le type serial et pour la date nous pourrons
 >  
 > `postgres://utilisateur:mot_de_passe@serveur:port/nom_de_la_base`  
   
+autre doc pour la configuration sur Linux ([fedora](https://doc.fedora-fr.org/wiki/Installation_et_configuration_de_PostgreSQL))
+
+>###2 Installation de PostgreSQL
+>#### 2.1 Installation
+> L'installation du serveur de base de données se fera par dnf, le gestionnaire de paquets de Fedora. Voici la commande 
+>à taper dans un terminal :
+>```bash
+># dnf install postgresql-server
+>``` 
+>   
+>#### 2.2 Activation  
+> Pour utiliser PostgreSQL, il vous faut avant tout faire une initialisation de la base de données, pour cela tapez cette 
+>commande :
+>```bash
+># postgresql-setup initdb
+>``` 
+>   
+> Si tout se passe bien vous avez pour réponse :
+>   
+> base de données : [ ok ]  
+> Ensuite, il est nécessaire de démarrer le service :
+>```bash
+># systemctl start postgresql.service
+>``` 
+> 
+> Afin de s'assurer que le service est bien démarré sans erreur, son état peut être consulté :
+>```bash
+># systemctl status postgresql.service
+>``` 
+> 
+> Si vous souhaitez que son lancement soit automatique lors du démarrage de la machine :
+>```bash
+># systemctl enable postgresql.service
+>``` 
+>  
+>#### 2.3 L'utilisateur postgres  
+>>#####    L'utilisateur postgres  
+>> Dès le départ, PostgreSQL crée un utilisateur nommé postgres.
+>> Cet utilisateur est le super-utilisateur (l'équivalent de root sur votre système) du serveur de base de donnée.
+> 
+> Par mesure de sécurité, il est impératif d'affecter un mot de passe chiffré à cet utilisateur :
+>```bash
+># su - postgres
+>``` 
+> 
+> 
+> Désormais vous êtes en tant qu'utilisateur postgres, ensuite tapez :  
+>```bash
+>$ psql
+>```
+> Pour résultat vous devriez avoir ceci :
+>```postgresql
+> could not change directory to "/root"
+> Welcome to psql 10.6.1, the PostgreSQL interactive terminal.
+> Type:  \copyright for distribution terms
+>        \h for help with SQL commands
+>        \? for help with psql commands
+>        \g or terminate with semicolon to execute query
+>        \q to quit
+> postgres=# 
+>``` 
+> 
+> 
+>>A noter
+>> Le # indique bien que vous utilisez un super-utilisateur du serveur de base de donnée PostgreSQL.  
+>
+> C'est le moment de lui attribuer un mot de passe, <mot_de_passe> est à remplacer par le mot passe de votre choix, pour
+> cela tapez :  
+>```postgresql
+># ALTER USER postgres WITH PASSWORD '<mot_de_passe>';
+>``` 
+>  
+>####2.4 Sécurisation
+> La sécurité, lorsque l'on a une base de données sur le réseau, c'est un point crucial.
+> En effet, il est tout à fait possible de chiffrer les mots de passes des utilisateurs du serveur de base de données.
+> 
+> Pour cela, il faut éditer le fichier `/var/lib/pgsql/pg_hba.conf` en tant qu'utilisateur root et modifier le fichier en
+> remplaçant `ident sameuser` par `md5` afin d'obtenir les lignes suivantes :
+> 
+>
+>```editorconfig
+> # "local" is for Unix domain socket connections only
+> local   all         all                               md5
+> # IPv4 local connections:
+> host    all         all         127.0.0.1/32          md5
+> # IPv6 local connections:
+> host    all         all         ::1/128               md5
+>```
+> Pour que les modifications prennent effet il faut redémarrer le serveur :
+>  
+>```bash
+># systemctl restart postgresql.service
+>``` 
+> 
+> De plus amples informations sur la sécurisation d'une base de données PostgreSQL sont disponibles dans le documentation
+> du serveur.
+> 
+>#### 2.5 Création d'un utilisateur
+>##### 2.5.1 À la main  
+> Il est recommandé de ne pas utiliser le super utilisateur postgres pour lire et écrire dans vos base de données.
+> Pour cela, il est intéressant de créer un utilisateur dédié :
+>```bash
+> # su - postgres
+> $ psql
+>``` 
+> 
+>
+> Pour créer l'utilisateur, tapez (<mon_user> est à changer par un nom d'utilisateur de votre choix) :
+>```postgresql
+># CREATE USER <mon_user>;
+>``` 
+> 
+> 
+> Pour lui donner le droit de créer des bases de données, tapez ceci (<mon_user> est à changer par le nom d'utilisateur 
+>choisi au préalable) :
+>```postgresql
+># ALTER ROLE <mon_user> WITH CREATEDB;
+>``` 
+> 
+> 
+> Il est vivement conseillé d'attribuer un mot de passe pour votre nouvel utilisateur (<mon_user> est à changer par le nom 
+>d'utilisateur choisi au préalable, <password> est à changer par le mot de passe correspondant) :
+>```postgresql
+> # ALTER USER <mon_user> WITH ENCRYPTED PASSWORD '<password>';
+>``` 
+> 
+>
+> Ensuite, créez la base de donnée de l'utilisateur (<mon_user> est à changer par le nom d'utilisateur choisi au préalable) :
+>```postgresql
+># CREATE DATABASE <mon_user>;
+>``` 
+>>Utilisateur virtuel éponyme
+>> Si l'utilisateur virtuel que vous venez de créer porte le même nom que votre utilisateur système, il est possible 
+>>d'utiliser l'interface psql depuis celui-ci.
+>> Remarquez tout de même le changement du signe de l'invite de commande qui devient alors >, cela signifie bien que vous
+>> n'êtes plus en utilisateur root.
+ 
+
