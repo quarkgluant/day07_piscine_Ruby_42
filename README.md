@@ -33,12 +33,12 @@ Extrait de l'excellent ebook de Xavier Nayrac **Créer votre framework web en Ru
 >Avant de pouvoir déployer une application réalisée à l’aide de notre framework sur Heroku, nous devons apprendre à utiliser
 > la base de données Postgresql. Pour la bonne raison qu’Heroku ne gère pas Sqlite.
 >
->###Installation
+>### Installation
 >Pour l’installation sur Windows, téléchargez ce dont vous avez besoin sur le site web de Postgresql. Sur ce même site 
 >il y a une section consacrée à OS X. Sur Linux vous devriez pouvoir utiliser votre gestionnaire de paquets, par exemple 
 >sudo apt-get install postgresql, ou vous pouvez là aussi consulter le site web de Postgresql, section Linux.
 >
->###Configuration
+>### Configuration
 >La base de données Postgresql est pré configurée avec un utilisateur répondant au nom de postgres. Vous allez ajouter
 > un nouvel utilisateur nommé framework avec lequel vous pourrez pratiquer tous les tests qu’ils vous plaira. Le programme
 > en ligne de commande que nous allons utiliser pour gérer Postgresql est psql. Vous verrez qu’il ressemble assez à sqlite3,
@@ -55,7 +55,7 @@ Extrait de l'excellent ebook de Xavier Nayrac **Créer votre framework web en Ru
 >
 >Une fois connecté, vous pouvez créer un nouvel utilisateur. Ici je crée un utilisateur ayant pour nom framework et pour mot de passe bonjour :
 >
->###Création d’un utilisateur  
+>### Création d’un utilisateur  
 >```postgresql
 >    postgres=# create user framework password 'bonjour';
 >```
@@ -71,12 +71,12 @@ Extrait de l'excellent ebook de Xavier Nayrac **Créer votre framework web en Ru
 >```postgresql
 >postgres=# alter user framework with superuser;  
 >```
->###Création de la base de données  
+>### Création de la base de données  
 >Avec Sqlite il fallait simplement créer un nouveau fichier pour obtenir une nouvelle base de données. Avec Postgresql 
 >nous devons utiliser le langage SQL. Nous créons une base de donnée nommée framework_blog et nous spécifions qu’elle 
 >appartient à l’utilisateur framework.  
 >
->####Création d’une base de données  
+>#### Création d’une base de données  
 >```postgresql
 >postgres=# create database framework_blog owner framework;
 >```
@@ -99,7 +99,7 @@ Extrait de l'excellent ebook de Xavier Nayrac **Créer votre framework web en Ru
 >Avant de poursuivre nous devons nous connecter à la base de données framework_blog. Pour ce faire nous utilisons la 
 >commande `\c nom_de_la_base`  
 >
->###Connexion à la base framework_blog  
+>### Connexion à la base framework_blog  
 >```postgresql
 > postgres=# \c framework_blog 
 > You are now connected to database "framework_blog" as user "postgres".
@@ -257,7 +257,7 @@ autre doc pour la configuration sur Linux ([fedora](https://doc.fedora-fr.org/wi
 ># ALTER USER postgres WITH PASSWORD '<mot_de_passe>';
 >``` 
 >  
->####2.4 Sécurisation
+>#### 2.4 Sécurisation
 > La sécurité, lorsque l'on a une base de données sur le réseau, c'est un point crucial.
 > En effet, il est tout à fait possible de chiffrer les mots de passes des utilisateurs du serveur de base de données.
 > 
