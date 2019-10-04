@@ -320,9 +320,9 @@ brew install postgresql
 #  pg_ctl -D /Users/pcadiot/.brew/var/postgres start
 pg_ctl -D /Users/pcadiot/.brew/var/postgres start
 cd ex00
-rvm 2.3.6
-rvm gemset create d07
-rvm gemset use d07
+rvm 2.3.4
+rvm gemset create 2.3.4@rails4.2.7
+rvm 2.3.4@rails4.2.7
 gem install rails -v 4.2.7
 bundle update
 createdb d07
