@@ -325,12 +325,20 @@ rvm gemset create 2.3.4@rails4.2.7
 rvm 2.3.4@rails4.2.7
 gem install rails -v 4.2.7
 bundle update
-createdb d07
+# createdb d07
 rails new acme -d postgresql
 cd acme
 cp -f ~/Downloads/gemfile .
 rake db:create  
-```
+```  
+  
+En cas de problème de connexion, vérifier le fichier pg_hba.conf, en remplaçant sur les lignes `local` et `host` les `ident`
+par `md5` ou mieux `scram-sha-256`  en oubliant pas de relancer postgres après avoir sauvegardé les modifications sur ce 
+fichier.  
+
+
+  
+  
 
 
  
