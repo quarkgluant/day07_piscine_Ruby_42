@@ -1,14 +1,9 @@
 Rails.application.routes.draw do
-  
-  root 'users#new'
-  get '/new' => 'users#new', as: 'new'
 
-  get '/create' => 'users#create', as: 'create'
-
-  get '/edit' => 'users#edit', as: 'edit'
-
-  # resources :users
   devise_for :users
+  root 'users#new'
+
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

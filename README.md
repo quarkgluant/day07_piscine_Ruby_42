@@ -1,3 +1,30 @@
+# day07 de la piscine Ruby/Rails de 42 Paris
+le jour 07 de la piscine Ruby de 42 refait/day06 of the 42 swimming pool Ruby/rails  
+  
+## Salut à toi duoquadratain qui se retrouve tout seul à faire la piscine Ruby !  
+  
+  
+### Tes meilleurs amis  
+les [railsguides](https://guides.rubyonrails.org/) pour des explications d'ensemble et la doc de l'[API](https://api.rubyonrails.org/) pour de la doc sur une méthode précise.  
+  
+Mais aussi:  
+Une très bonne adresse en français [grafikart](https://www.grafikart.fr/tutoriels/ruby-on-rails)  
+L'excellent [Rails tutorial](https://www.railstutorial.org/book) de Michael Hartl  
+[goRails](https://gorails.com/series), d'autant qu'avec le GitHub Student Pack, on bénéficie d'un abonnement d'un an gratos  
+[RailsCast](http://railscasts.com/)  
+ton cerveau, il peut servir...    
+  
+### Avant de coder, installons !  
+Avant toute chose et tout code, il vous faut utiliser un gestionnaire de version de Ruby (et donc de Rails) [RVM](https://rvm.io/) et [rbenv](https://github.com/rbenv/rbenv#readme) étant les plus connus et utilisés, mais existe aussi chruby, uru, etc.  
+  
+Avec RVM, on installe la version de Ruby désirée, en regardant sur [site officel de Ruby](https://www.ruby-lang.org/en/downloads/releases/) les versions de Ruby (`rvm install 2.6.5` par exemple), créer un gemset (un environnement isolé) avec `rvm gemset create nom_du_gemset`, je nomme en général mes gemsets avec la version de Ruby@rails_version, par ex `rvm gemset create 2.6.5@rails4.2.7`.  
+Une fois le gemset créé, on rentre dedans/l'utilise avec `rvm 2.6.5@rails4.2.7` dans cet exemple et ensuite, seulement on installe rails avec la bonne version avec `gem install rails  -v 4.2.7 -no-ri -no-rdoc` sans la doc incluse  
+
+
+outre le code de ce repo voici quelques pistes pour t'aider:  
+
+### ex00  
+
 Extrait de l'excellent ebook de Xavier Nayrac **Créer votre framework web en Ruby**
 à acheter sur [leanpub](https://leanpub.com)  
   
@@ -336,9 +363,48 @@ En cas de problème de connexion, vérifier le fichier pg_hba.conf, en remplaça
 par `md5` ou mieux `scram-sha-256`  en oubliant pas de relancer postgres après avoir sauvegardé les modifications sur ce 
 fichier.  
 
-
+## ex01  
   
-  
+  Ha [**Devise**](http://devise.plataformatec.com.br/)
+```bash
+rails g devise:install  # Permet de générer la configuration
+rails g devise:views    # Permet d'importer les vues
+rails g devise User     # Permet de générer le model et les migrations pour le model User
+```  
+Après la première commande, devise vous affiche ceci:  
+    
+> Some setup you must do manually if you haven't yet:
+>  
+>    1. Ensure you have defined default url options in your environments files. Here
+>       is an example of default_url_options appropriate for a development environment
+>       in config/environments/development.rb:
+>```ruby
+>config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+>```  
+>    In production, :host should be set to the actual host of your application.
+>  
+>    2. Ensure you have defined root_url to *something* in your config/routes.rb.
+>       For example:
+>```ruby
+>root to: "home#index"
+>```  
+>         
+>  
+>    3. Ensure you have flash messages in app/views/layouts/application.html.erb.
+>       For example:
+>  
+>```erbruby
+><p class="notice"><%= notice %></p>
+><p class="alert"><%= alert %></p>
+>```         
+>    
+>    4. You can copy Devise views (for customization) to your app by running:
+>```bash
+>rails g devise:views
+>```  
+>         
+>  
+    
 
 
  
