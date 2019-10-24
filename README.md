@@ -15,10 +15,14 @@ L'excellent [Rails tutorial](https://www.railstutorial.org/book) de Michael Hart
 ton cerveau, il peut servir...    
   
 ### Avant de coder, installons !  
-Avant toute chose et tout code, il vous faut utiliser un gestionnaire de version de Ruby (et donc de Rails) [RVM](https://rvm.io/) et [rbenv](https://github.com/rbenv/rbenv#readme) étant les plus connus et utilisés, mais existe aussi chruby, uru, etc.  
+Avant toute chose et tout code, il vous faut utiliser un gestionnaire de version de Ruby (et donc de Rails) [RVM](https://rvm.io/)
+ et [rbenv](https://github.com/rbenv/rbenv#readme) étant les plus connus et utilisés, mais existe aussi chruby, uru, etc.  
   
-Avec RVM, on installe la version de Ruby désirée, en regardant sur [site officel de Ruby](https://www.ruby-lang.org/en/downloads/releases/) les versions de Ruby (`rvm install 2.6.5` par exemple), créer un gemset (un environnement isolé) avec `rvm gemset create nom_du_gemset`, je nomme en général mes gemsets avec la version de Ruby@rails_version, par ex `rvm gemset create 2.6.5@rails4.2.7`.  
-Une fois le gemset créé, on rentre dedans/l'utilise avec `rvm 2.6.5@rails4.2.7` dans cet exemple et ensuite, seulement on installe rails avec la bonne version avec `gem install rails  -v 4.2.7 -no-ri -no-rdoc` sans la doc incluse  
+Avec RVM, on installe la version de Ruby désirée, en regardant sur [site officel de Ruby](https://www.ruby-lang.org/en/downloads/releases/) 
+les versions de Ruby (`rvm install 2.6.5` par exemple), créer un gemset (un environnement isolé) avec `rvm gemset create 
+nom_du_gemset`, je nomme en général mes gemsets avec la version de Ruby@rails_version, par ex `rvm gemset create rails427`.  
+Une fois le gemset créé, on rentre dedans/l'utilise avec `rvm 2.6.5@rails4.2.7` dans cet exemple et ensuite, seulement on 
+installe rails avec la bonne version avec `gem install rails  -v 4.2.7 -no-ri -no-rdoc` sans la doc incluse 
 
 
 outre le code de ce repo voici quelques pistes pour t'aider:  
@@ -53,7 +57,8 @@ Extrait de l'excellent ebook de Xavier Nayrac **Créer votre framework web en Ru
 >```
 >La commande `sudo -u nom commande` permet de lancer le programme commande comme si vous étiez l’utilisateur nom.
 >
->Une fois connecté, vous pouvez créer un nouvel utilisateur. Ici je crée un utilisateur ayant pour nom framework et pour mot de passe bonjour :
+>Une fois connecté, vous pouvez créer un nouvel utilisateur. Ici je crée un utilisateur ayant pour nom framework et pour 
+>mot de passe bonjour :
 >
 >### Création d’un utilisateur  
 >```postgresql
