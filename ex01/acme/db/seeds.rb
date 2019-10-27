@@ -5,3 +5,26 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+User.create!(bio: FFaker::HipsterIpsum.paragraph,
+             name: 'admin',
+             email:'admin@gmail.com',
+             password:'password',
+             password_confirmation: 'password')
+
+User.create!(bio: FFaker::HipsterIpsum.paragraph,
+             name: 'moi',
+             email:'pat@localhost',
+             password:'12345678',
+             password_confirmation: '12345678')
+
+50.times do |tm|
+  mk = Brand.create!(name: FFaker::Product.brand,
+                     avatar: open(FFaker::Avatar.image))
+
+  50.times do |tw|
+    Product.create!(name: FFaker::Product.product,
+                    pict: open(FFaker::Avatar.image),
+                    description: FFaker::HipsterIpsum.paragraph,
+                    brand_id: mk.id, price: price.sample)
+  end
+end

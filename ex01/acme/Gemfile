@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-gem 'bcrypt', '3.1.12'
 gem 'better_errors', group: :development
 gem 'bootstrap-sass'
 gem 'bootstrap_form'
@@ -11,7 +10,8 @@ gem 'devise'
 gem 'ffaker'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
-gem 'pg'
+gem 'pg', '~> 0.21'
+gem 'mini_magick'
 gem 'pry', group: :development
 gem 'pry-nav', group: :development
 gem 'pry-rails', group: :development
@@ -23,7 +23,7 @@ gem 'rails', '4.2.7'
 gem 'rails_12factor', group: :production
 gem 'rails_admin'
 gem 'rolify'
-gem 'rubycritic', require: false
+gem 'rubycritic', :require => false
 gem 'sass-rails', '~> 5.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'spring', group: :development

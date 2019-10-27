@@ -27,7 +27,7 @@ installe rails avec la bonne version avec `gem install rails  -v 4.2.7 -no-ri -n
 
 outre le code de ce repo voici quelques pistes pour t'aider:  
 
-### ex00  
+## ex00  
 
 Extrait de l'excellent ebook de Xavier Nayrac **Créer votre framework web en Ruby**
 à acheter sur [leanpub](https://leanpub.com)  
@@ -353,7 +353,7 @@ brew install postgresql
 pg_ctl -D /Users/pcadiot/.brew/var/postgres start
 cd ex00
 rvm 2.3.4
-rvm gemset create 2.3.4@rails4.2.7
+rvm gemset create rails4.2.7
 rvm 2.3.4@rails4.2.7
 gem install rails -v 4.2.7
 bundle update
@@ -409,8 +409,84 @@ Après la première commande, devise vous affiche ceci:
 >```  
 >         
 >  
-    
 
+#####Erreurs possibles  
+- Lors de `rails generate devise:install` cette erreur:
+ >`in `<top (required)>': undefined method `to_time_preserves_timezone=' for ActiveSupport:Module (NoMethodError)`   
+  
+ Commentez la ligne 10 dans acme/config/initializers/to_time_preserves_timezone.rb, cette erreur survient si votre version 
+ de Ruby est inférieure à la 2.4
 
+- Lorsque vous faites votre `rails generate devise user` et malgré la présence dans votre Gemfile de la gem pg
+ >`in `rescue in spec': Specified 'postgresql' for database adapter, but the gem is not loaded. Add `gem 'pg'` to your  
+ >Gemfile (and ensure its version is at the minimum required by ActiveRecord). (Gem::LoadError)`  
+
+ rajoutez dans le Gemfile une version compatible, la 0.21 par exemple
+ ```ruby
+ # extrait du Gemfile
+ gem 'pg', '~> 0.21' 
+ ```
+ Puis faite un `bundle update`
  
+Pour les validations, vous pouvez rajouter dans le `app\models\user.rb`
+```ruby
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :validatable
 
+  validates :password, presence: true, length: { minimum: 6 }, on: :create
+  validates :name, presence: true, on: :create
+  validates :email, presence: true, on: :create
+```
+
+Pour les strong_parameters, il faut rajouter dans `application_controller.rb`  (comme indiqué dans la 
+[doc de devise](http://devise.plataformatec.com.br/#configuring-controllers) )
+```ruby
+  before_action :configure_permitted_parameters, if: :devise_controller?
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :email])
+  end
+```
+Et bien-sur il vous faut modifier la migration créée par Devise en rajoutant le nom et la biography  
+```ruby
+# à rajouter dans acme/app/db/migrate/xxxxxxxx_devise_create_user.rb
+      t.string :name, null: false, default: ''
+      t.text :bio, default: '' 
+```
+et pareil, rajouter ces deux champs dans les vues `views/devise/registrations/new.html.erb` et `edit.html.erb`  
+```erbruby
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.email_field :email, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :biography %><br />
+    <%= f.text_area :bio %>
+  </div>
+```
+Après ces opérations, le seed passe et les 2 Users stories sont satisfaites !
+
+##ex02
+```shell script
+rails generate uploader Avatar
+rails generate uploader Pict
+rails generate model Brand name:string avatar:string
+rails generate scaffold Product name:string description:text brand:references pict:string price:decimal
+rails g scaffold
+```
+
+```ruby
+class Brand
+  has_many  :products
+end
+```
