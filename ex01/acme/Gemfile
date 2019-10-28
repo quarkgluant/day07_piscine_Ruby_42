@@ -10,8 +10,8 @@ gem 'devise'
 gem 'ffaker'
 gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
-gem 'pg', '~> 0.21'
 gem 'mini_magick'
+gem 'pg', '~> 0.21'
 gem 'pry', group: :development
 gem 'pry-nav', group: :development
 gem 'pry-rails', group: :development

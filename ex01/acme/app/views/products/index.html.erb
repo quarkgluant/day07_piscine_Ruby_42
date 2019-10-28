@@ -19,8 +19,8 @@
       <tr>
         <td><%= product.name %></td>
         <td><%= product.description %></td>
-        <td><%= product.brand %></td>
-        <td><%= product.pict %></td>
+        <td><%= product.brand.name %></td>
+        <td><%= image_tag product.pict_url(:thumb) unless product.pict.file.nil? %></td>
         <td><%= product.price %></td>
         <td><%= link_to 'Show', product %></td>
         <td><%= link_to 'Edit', edit_product_path(product) %></td>

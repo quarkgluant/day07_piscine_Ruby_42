@@ -410,7 +410,7 @@ Après la première commande, devise vous affiche ceci:
 >         
 >  
 
-#####Erreurs possibles  
+##### Erreurs possibles  
 - Lors de `rails generate devise:install` cette erreur:
  >`in `<top (required)>': undefined method `to_time_preserves_timezone=' for ActiveSupport:Module (NoMethodError)`   
   
@@ -476,17 +476,95 @@ et pareil, rajouter ces deux champs dans les vues `views/devise/registrations/ne
 ```
 Après ces opérations, le seed passe et les 2 Users stories sont satisfaites !
 
-##ex02
+##ex02  
+J'ai fait le choix d'avoir deux uploaders différents, un pour les avatars de Brand, l'autre pour les pict de Product  
+
 ```shell script
 rails generate uploader Avatar
 rails generate uploader Pict
 rails generate model Brand name:string avatar:string
 rails generate scaffold Product name:string description:text brand:references pict:string price:decimal
-rails g scaffold
 ```
-
+  
+ on monte les uploaders
 ```ruby
 class Brand
   has_many  :products
+  mount_uploader :avatar, AvatarUploader
 end
+```
+
+```ruby
+class Product < ActiveRecord::Base
+  belongs_to :brand
+  mount_uploader :pict, PictUploader
+end
+```
+
+Pour pouvoir bénéficier de `resize_to_fit` on doit décommenter dans les Uploaders les lignes 
+`include CarrierWave::MiniMagick` et `  version :thumb do  
+                                          process resize_to_fit: [50, 50]  
+                                        end`  
+Pour que MiniMagik fonctionne, il faut installer `ImageMagik` comme indiqué dans la doc de CarrierWave, avec 
+`brew install imagemagick` sur MacOS ou votre gestionnaire de paquets sur Linux (`apt-get install` ou `dnf install` par 
+ex.) **ET** modifier le Gemfile en rajoutant la gem minimagik  
+```ruby
+# ex01/acme/Gemfile (extrait à  rajouter)
+gem 'mini_magick'
+```                                     
+```ruby
+# ex01/acme/uploaders/avatar_uploader.rb
+class AvatarUploader < CarrierWave::Uploader::Base
+  # Include RMagick or MiniMagick support:
+  # include CarrierWave::RMagick
+  include CarrierWave::MiniMagick
+
+  # Choose what kind of storage to use for this uploader:
+  storage :file
+  # storage :fog
+
+  # Override the directory where uploaded files will be stored.
+  # This is a sensible default for uploaders that are meant to be mounted:
+  def store_dir
+    "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+  end
+
+  # J'ai enlevé tout ce qui ne nous concerne pas
+
+  # Create different versions of your uploaded files:
+  version :thumb do
+    process resize_to_fit: [50, 50]
+  end
+
+  # Add a white list of extensions which are allowed to be uploaded.
+  # ...
+end
+```
+Pour que le `db/seeds.rb` passe, il faut rajouter un Array nommé price  
+```ruby
+# ex01/acme/db/seeds.rb (extrait)
+price = [1.29, 4.00, 5.25, 7.75, 9.99, 10.00, 25.5, 49.99, 66.66, 74.99, 99.99]
+50.times do |tm|
+  mk = Brand.create!(name: FFaker::Product.brand,
+                     avatar: open(FFaker::Avatar.image))
+
+  50.times do |tw|
+    Product.create!(name: FFaker::Product.product,
+                    pict: open(FFaker::Avatar.image),
+                    description: FFaker::HipsterIpsum.paragraph,
+                    brand_id: mk.id, price: price.sample)
+  end
+end 
+```
+
+Dernière modif, pour que l'affichage des Products soit joli, on modifie 2 lignes, l'une pour afficher le nom de la marque
+(Brand) et l'autre pour afficher la photo réduite, la miniature (thumb) de chaque Product  
+```erbruby
+<!-- # ex01/acme/views/products.html.erb (extrait) -->
+<!--# avant : -->
+         <td><%= product.brand %></td>
+         <td><%= product.pict %></td>
+<!--# après: -->
+        <td><%= product.brand.name %></td>
+        <td><%= image_tag product.pict_url(:thumb) unless product.pict.file.nil? %></td> 
 ```
