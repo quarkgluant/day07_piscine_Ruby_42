@@ -19,6 +19,7 @@ gen
 /test/tmp/
 /test/version_tmp/
 /tmp/
+/public/uploads/
 
 # Used by dotenv library to load environment variables.
 # .env
