@@ -12,12 +12,12 @@
 
 <p>
   <strong>Brand:</strong>
-  <%= @product.brand %>
+  <%= @product.brand.name %>
 </p>
 
 <p>
   <strong>Pict:</strong>
-  <%= @product.pict %>
+  <%= image_tag @product.pict_url %>
 </p>
 
 <p>
@@ -25,5 +25,5 @@
   <%= @product.price %>
 </p>
 
-<%= link_to 'Edit', edit_product_path(@product) %> |
-<%= link_to 'Back', products_path %>
+<%= link_to 'Edit', edit_product_path(@product), class: 'btn btn-primary' %> |
+<%= link_to 'Back', products_path, class: 'btn btn-primary' %>

@@ -17,11 +17,11 @@
 #              password:'12345678',
 #              password_confirmation: '12345678')
 price = [1.29, 4.00, 5.25, 7.75, 9.99, 10.00, 25.5, 49.99, 66.66, 74.99, 99.99]
-50.times do |tm|
+5.times do |tm|
   mk = Brand.create!(name: FFaker::Product.brand,
                      avatar: open(FFaker::Avatar.image))
 
-  50.times do |tw|
+  10.times do |tw|
     Product.create!(name: FFaker::Product.product,
                     pict: open(FFaker::Avatar.image),
                     description: FFaker::HipsterIpsum.paragraph,

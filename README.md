@@ -477,34 +477,52 @@ et pareil, rajouter ces deux champs dans les vues `views/devise/registrations/ne
 Après ces opérations, le seed passe et les 2 Users stories sont satisfaites !
 
 ##ex02  
-J'ai fait le choix d'avoir deux uploaders différents, un pour les avatars de Brand, l'autre pour les pict de Product  
+_Pour l'instant (ayant déjà un compte gratuit Cloudinary et ne voulant pas l'épuiser avec les 5000 du seed), je ne travaille
+qu'en local, on verra ça après !_ Mais **promis**, on va le faire !   
+J'ai fait le choix d'avoir deux uploaders différents, un pour les avatars de Brand, l'autre pour les pict de Product. On 
+va demander à Rails de faire (aussi) le café aussi, en scaffoldant comme des bêtes   
 
 ```shell script
 rails generate uploader Avatar
 rails generate uploader Pict
-rails generate model Brand name:string avatar:string
+rails generate scaffold Brand name:string avatar:string
 rails generate scaffold Product name:string description:text brand:references pict:string price:decimal
 ```
   
- on monte les uploaders
+ on monte les uploaders dans les modèles, et on en profite pour écrire les associations
 ```ruby
 class Brand
   has_many  :products
   mount_uploader :avatar, AvatarUploader
 end
 ```
-
+Comme la maison ne recule devant rien, on va faire des attributs imbriqués, des nested_attributes pour pouvoir éditer, 
+depuis la page edit d'un Product, aussi le nom et l'avatar d'une marque (Brand)   
 ```ruby
 class Product < ActiveRecord::Base
   belongs_to :brand
+  accepts_nested_attributes_for :brand
   mount_uploader :pict, PictUploader
 end
 ```
-
+Puisqu'on utilise les `nested_attributes`, il faut modifier les `strong_parameters` dans le contrôleur des produits avec
+`brand_attributes`, et, tant qu'on y est, on rajoute aussi la version cache de pict et d'avatar (qui sert à stocker en 
+cache l'image téléchargée en cas de rafraîchissement ou de non validation de la page)    
+```ruby
+  # extrait de acme/controllers/products_controller.rb
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def product_params
+    params.require(:product).permit(:name, :description, :brand_id, :pict, :price,
+                                    :brand, # ça je ne sais pas pourquoi rails me l'a demandée
+                                    :pict_cache, #le cache de pict, qui l'eût cru !                              
+                                    brand_attributes: %i[name avatar avatar_cache])
+  end
+```
+_ceci (minimagik et imageMagik) ne concerne que le stockage des images en local_
 Pour pouvoir bénéficier de `resize_to_fit` on doit décommenter dans les Uploaders les lignes 
 `include CarrierWave::MiniMagick` et `  version :thumb do  
                                           process resize_to_fit: [50, 50]  
-                                        end`  
+                                          end`  
 Pour que MiniMagik fonctionne, il faut installer `ImageMagik` comme indiqué dans la doc de CarrierWave, avec 
 `brew install imagemagick` sur MacOS ou votre gestionnaire de paquets sur Linux (`apt-get install` ou `dnf install` par 
 ex.) **ET** modifier le Gemfile en rajoutant la gem minimagik  
@@ -567,4 +585,203 @@ Dernière modif, pour que l'affichage des Products soit joli, on modifie 2 ligne
 <!--# après: -->
         <td><%= product.brand.name %></td>
         <td><%= image_tag product.pict_url(:thumb) unless product.pict.file.nil? %></td> 
+```  
+  
+  
+_Maintenant ocuppons-nous de Cloudinary !_  
+  
+  
+1. l'identification  
+chez moi, la méthode avec un fichier YAML, dans `config` n'a jamais voulu fonctionner !
+```yaml
+--- acme/config/cloudinary.yaml
+development:
+  cloud_name: dl1hwhz99
+  api_key: <%= ENV["CLOUDINARY_API_KEY"] %>
+  api_secret: <%= ENV["CLOUDINARY_API_SECRET"] %>
+  enhance_image_tag: true
+  static_file_support: false
+production:
+  cloud_name: dl1hwhz99
+  api_key: <%= ENV["CLOUDINARY_API_KEY"] %>
+  api_secret: <%= ENV["CLOUDINARY_API_SECRET"] %>
+  enhance_image_tag: true
+  static_file_support: true
+test:
+  cloud_name: dl1hwhz99
+  api_key: <%= ENV["CLOUDINARY_API_KEY"] %>
+  api_secret: <%= ENV["CLOUDINARY_API_SECRET"] %>
+  enhance_image_tag: true
+  static_file_support: false
 ```
+Et non, petit malin, je ne vais pas vous montrer mes api_key et api_secret ! J'utilise des variables d'environnement. Pour
+les utiliser, soit vous les mettez dans votre .bashrc ou .zshrc, puis un petit coup de `source ~/.zshrc`
+```shell script
+export CLOUDINARY_API_SECRET=MaisSiCestMaVeritableCle
+export CLOUDINARY_API_KEY=12345678913345
+```
+ou vous lancez vos commandes ainsi (mais les variables ne seront conservées que durant la session)
+```shell script
+export CLOUDINARY_API_SECRET=MaisSiCestMaVeritableCle
+export CLOUDINARY_API_KEY=12345678913345
+rake db:migrate
+rails server
+```
+Bon, revenons à nos moutons électriques, puisque cette méthode (avec le fichier cloudinary.yml) ne fonctionnait pas, j'ai
+utilisé l'autre façon, en créant un fichier `acme/config/initializer/cloudinary.rb`  
+```ruby
+Cloudinary.config do |config|
+  config.cloud_name = 'dl1hwhz99'
+  config.api_key = (ENV['CLOUDINARY_API_KEY']).to_s
+  config.api_secret = (ENV['CLOUDINARY_API_SECRET']).to_s
+  config.enhance_image_tag = true
+  config.secure = true
+  config.cdn_subdomain = true
+end
+```
+Si cette façon fonctionne, on remarquera qu'elle est moins souple quant à la définition de diférents environnements (dev, 
+prod, test).  
+Pour les utilisateurs de Rubymine, il faut éditer la configuration, dans la **Toolbar**, en principe juste sous la barre
+des menus, clique sur le petit triangle tête en bas, **Edit Configurations...** et vous aurez alors, dans la boîte de 
+dialogues venant de s'ouvrir, une ligne pour les variables d'environnement, avec, tout à fait à droite de cette ligne, une
+petite icône grisée rectangulaire de liste permettant d'entrer les variables sous forem de tableaux  
+
+2. les modifications des uploaders  
+
+
+On va effacer la grande majorité de ce qu'on avait fait avant, quand on travaillait sans Cloudinary, en local !  
+```ruby
+class AvatarUploader < CarrierWave::Uploader::Base
+  include Cloudinary::CarrierWave
+
+  def public_id
+    return 'acme/' + model.name
+  end
+
+  # Create different versions of your uploaded files:
+  version :thumb do
+    eager
+    process resize_to_fit: [50, 50]
+  end
+end
+```
+On inclut bien-sûr le module `Cloudinary::CarrierWave`, on rajoute `eager` dans `version :thumb` (c'est facultatif, ça 
+permet de forcer le traitement à l'upload des fichiers, sans ça, la création des miniatures se ferait lors des requêtes 
+du navigateur lors de l'affichage de la page) et on ajoute une méthode `public_id` afin de créer un identifiant unique 
+pour chaque fichier (le `'acme/' +` est lui aussi facultatif).  
+Si, comme moi, vous avez créer deux uploaders, vous faites bien-sûr la même chose pour l'autre, PictUploader!  
+
+3. Modification des form(ulaires)  
+
+Déjà, dans mes vues `edit.html.erb`, j'ai remplacé le `<%= render 'form' %>` par `<%= render 'form', brand: @brand %>` et 
+donc, dans mes partials `_form.html.erb` je n'ai plus de variables d'instances précédées d'un @, que des variables locales  
+
+```erbruby
+<%= form_for product do |f| %>
+  <% if product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="form-group field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="form-group field">
+    <%= f.label :brand %><br>
+    <%= f.text_field :brand_id %>
+    <%= f.fields_for :brand, product.brand do |ff| %>
+      <div class="form-group field">
+      <%= ff.label :name %><br>
+      <%= ff.text_field :name %>
+      </div>
+      <div class="form-group field">
+      <%= ff.label :avatar %><br>
+        <%= image_tag(product.brand.avatar_url) unless product.brand.avatar.file.nil? %>
+        <%= ff.hidden_field :avatar_cache %><br>
+      <%= ff.file_field :avatar %>
+      </div>
+    <% end %>
+  </div>
+  <div class="form-group field">
+    <%= f.label :pict %><br>
+    <%= image_tag(product.pict_url) unless product.pict.file.nil? %>
+    <%= f.hidden_field :pict_cache %><br>
+    <%= f.file_field :pict %>
+  </div>
+  <div class="form-group field">
+    <%= f.label :price %><br>
+    <%= f.text_field :price %>
+  </div>
+  <div class="actions">
+    <button>
+      <%= f.submit %>
+    </button>
+
+  </div>
+<% end %>
+```
+
+Pareil pour le form de brand, en plus simple puisque pas de **nested_attributes**  
+
+4. Modification des `index.html.erb`  
+
+exemple avec le products  
+
+```erbruby
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Products</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Brand</th>
+      <th>Pict</th>
+      <th>Price</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= product.description %></td>
+        <td><%= product.brand.name %></td>
+        <td><%= image_tag(product.pict_url(:thumb)) unless product.pict.file.nil? %></td>
+        <td><%= product.price %></td>
+        <td><%= link_to 'Show', product, class: 'btn btn-xs btn-primary' %></td>
+        <td><%= link_to 'Edit', edit_product_path(product), class: 'btn btn-xs btn-primary' %></td>
+        <td><%= link_to 'Destroy', product, method: :delete, class: 'btn btn-xs btn-danger', data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= button_to 'New Product', new_product_path, class: 'btn btn-primary' %>
+<%= link_to 'Brands', brands_path, class: 'btn btn-primary' %>
+
+```
+On remarquera, pour faire zoli (!), l'utilisation de classes CSS de Bootstrap sur les 
+`link_to 'Titre', chemin, , class: 'btn btn-xs btn-primary'` ou `btn-danger` pour l'action delete, `btn-xs` bouton eXtra 
+Small pour avoir de petits boutons !  
+
+5. Modification des `show.html.erb`  
+
+Bon, maintenant, vous pouvez le faire tout seul !
