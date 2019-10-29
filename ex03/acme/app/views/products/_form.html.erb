@@ -1,0 +1,54 @@
+<%= form_for product do |f| %>
+  <% if product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="form-group field">
+    <%= f.label :description %><br>
+    <%= f.text_area :description %>
+  </div>
+  <div class="form-group field">
+    <%= f.label :brand %><br>
+    <%= f.text_field :brand_id %>
+    <%= f.fields_for :brand, product.brand do |ff| %>
+      <div class="form-group field">
+      <%= ff.label :name %><br>
+      <%= ff.text_field :name %>
+      </div>
+      <div class="form-group field">
+      <%= ff.label :avatar %><br>
+        <%= image_tag(product.brand.avatar_url) unless product.brand.avatar.file.nil? %>
+        <%= ff.hidden_field :avatar_cache %><br>
+      <%= ff.file_field :avatar %>
+      </div>
+    <% end %>
+  </div>
+  <div class="form-group field">
+    <%= f.label :pict %><br>
+    <%= image_tag(product.pict_url) unless product.pict.file.nil? %>
+    <%= f.hidden_field :pict_cache %><br>
+    <%= f.file_field :pict %>
+  </div>
+  <div class="form-group field">
+    <%= f.label :price %><br>
+    <%= f.text_field :price %>
+  </div>
+  <div class="actions">
+    <button>
+      <%= f.submit %>
+    </button>
+
+  </div>
+<% end %>

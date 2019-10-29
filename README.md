@@ -476,7 +476,7 @@ et pareil, rajouter ces deux champs dans les vues `views/devise/registrations/ne
 ```
 Après ces opérations, le seed passe et les 2 Users stories sont satisfaites !
 
-##ex02  
+## ex02  
 _Pour l'instant (ayant déjà un compte gratuit Cloudinary et ne voulant pas l'épuiser avec les 5000 du seed), je ne travaille
 qu'en local, on verra ça après !_ Mais **promis**, on va le faire !   
 J'ai fait le choix d'avoir deux uploaders différents, un pour les avatars de Brand, l'autre pour les pict de Product. On 
@@ -531,7 +531,7 @@ ex.) **ET** modifier le Gemfile en rajoutant la gem minimagik
 gem 'mini_magick'
 ```                                     
 ```ruby
-# ex01/acme/uploaders/avatar_uploader.rb
+# ex02/acme/uploaders/avatar_uploader.rb
 class AvatarUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
@@ -560,7 +560,7 @@ end
 ```
 Pour que le `db/seeds.rb` passe, il faut rajouter un Array nommé price  
 ```ruby
-# ex01/acme/db/seeds.rb (extrait)
+# ex02/acme/db/seeds.rb (extrait)
 price = [1.29, 4.00, 5.25, 7.75, 9.99, 10.00, 25.5, 49.99, 66.66, 74.99, 99.99]
 50.times do |tm|
   mk = Brand.create!(name: FFaker::Product.brand,
@@ -784,4 +784,6 @@ Small pour avoir de petits boutons !
 
 5. Modification des `show.html.erb`  
 
-Bon, maintenant, vous pouvez le faire tout seul !
+Bon, maintenant, vous pouvez le faire tout seul !  
+
+## ex03
