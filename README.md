@@ -398,7 +398,7 @@ Après la première commande, devise vous affiche ceci:
 >    3. Ensure you have flash messages in app/views/layouts/application.html.erb.
 >       For example:
 >  
->```erbruby
+>```html+erb
 ><p class="notice"><%= notice %></p>
 ><p class="alert"><%= alert %></p>
 >```         
@@ -458,7 +458,7 @@ Et bien-sur il vous faut modifier la migration créée par Devise en rajoutant l
       t.text :bio, default: '' 
 ```
 et pareil, rajouter ces deux champs dans les vues `views/devise/registrations/new.html.erb` et `edit.html.erb`  
-```erbruby
+```html+erb
   <div class="field">
     <%= f.label :name %><br />
     <%= f.text_field :name, autofocus: true, autocomplete: "name" %>
@@ -577,7 +577,7 @@ end
 
 Dernière modif, pour que l'affichage des Products soit joli, on modifie 2 lignes, l'une pour afficher le nom de la marque
 (Brand) et l'autre pour afficher la photo réduite, la miniature (thumb) de chaque Product  
-```erbruby
+```html+erb
 <!-- # ex01/acme/views/products.html.erb (extrait) -->
 <!--# avant : -->
          <td><%= product.brand %></td>
@@ -676,7 +676,7 @@ Si, comme moi, vous avez créer deux uploaders, vous faites bien-sûr la même c
 Déjà, dans mes vues `edit.html.erb`, j'ai remplacé le `<%= render 'form' %>` par `<%= render 'form', brand: @brand %>` et 
 donc, dans mes partials `_form.html.erb` je n'ai plus de variables d'instances précédées d'un @, que des variables locales  
 
-```erbruby
+```html+erb
 <%= form_for product do |f| %>
   <% if product.errors.any? %>
     <div id="error_explanation">
@@ -739,7 +739,7 @@ Pareil pour le form de brand, en plus simple puisque pas de **nested_attributes*
 
 exemple avec le products  
 
-```erbruby
+```html+erb
 <p id="notice"><%= notice %></p>
 
 <h1>Listing Products</h1>

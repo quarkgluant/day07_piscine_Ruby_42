@@ -7,9 +7,16 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<div>
+<nav class="container-fluid">
+<div class="col-lg-3">
   <%= render 'shared/navigation' %>
 </div>
+  <div class="col-lg-7">
+  </div>
+<div class="col-lg-2">
+  <%= render 'shared/panier' %>
+</div>
+</nav>
 <div>
   <p class="notice"><%= notice %></p>
   <p class="alert"><%= alert %></p>

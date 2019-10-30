@@ -1,5 +1,5 @@
 class CartItem
   include ActiveModel::Model
   belongs_to :cart
-  attr_accessor :product
+  attr_accessor :product, :quantity
 end
