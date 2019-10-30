@@ -7,29 +7,9 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<nav class="container-fluid">
-  <navbar class="navbar-default navbar-static-side col-lg-3" role="navigation">
-    <span>
-      <h4>
-        <%= 'Welcome  ' + current_user.name unless current_user.nil? %>
-      </h4>
-    </span>
-    <span>
-      <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-xs btn-primary' %>
-    </span>
-    <span>
-      <%= link_to 'Sign In', new_user_session_path, class: 'btn btn-xs btn-primary' %>
-    </span>
-    <span>
-      <%= link_to 'Log out', destroy_user_session_path, class: 'btn btn-xs btn-danger', method: :delete %>
-    </span>
-  </navbar>
-  <navbar class="col-lg-7"></navbar>
-  <navbar class="col-lg-2">
-    <span>
-    </span>
-  </navbar>
-</nav>
+<div>
+  <%= render 'shared/navigation' %>
+</div>
 <div>
   <p class="notice"><%= notice %></p>
   <p class="alert"><%= alert %></p>
