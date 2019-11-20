@@ -8,21 +8,24 @@
 </head>
 <body>
 <nav class="container-fluid">
-<div class="col-lg-3">
-  <%= render 'shared/navigation' %>
-</div>
-  <div class="col-lg-7">
+  <div class="col-lg-3">
+    <%= render 'shared/navigation' %>
   </div>
-<div class="col-lg-2">
-  <%= render 'shared/panier' %>
-</div>
+  <div class="col-lg-8">
+  </div>
+  <div class="col-lg-1">
+    <%= render 'shared/panier', cart: current_cart %>
+  </div>
 </nav>
 <div>
   <p class="notice"><%= notice %></p>
   <p class="alert"><%= alert %></p>
 </div>
 
-<%= yield %>
+<div class="container-fluid">
+  <%= yield %>
+</div>
+
 
 </body>
 </html>

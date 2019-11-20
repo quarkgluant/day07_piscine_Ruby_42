@@ -1,10 +1,18 @@
 <div class="col-lg-2">
   <navbar class="nav navbar-nav navbar-right">
-  <span>
-    <h3>
-      PANIER
-    </h3>
-  </span>
+    <span>
+      <h3>
+        PANIER
+        <%= current_user.id %>
+      </h3>
+    </span>
+    <ul>
+      <% unless cart.nil? && cart.cart_items.empty? %>
+        <% cart.cart_items.each do |cart_item| %>
+          <li>Quantité: <%= cart_item.quantity %> <%= cart_item.product.name %></li>
+        <% end %>
+      <% end %>
+    </ul>
 
   </navbar>
 </div>

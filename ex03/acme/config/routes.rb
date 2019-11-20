@@ -1,6 +1,14 @@
 Rails.application.routes.draw do
   resources :brands
-  resources :products
+  resources :products do
+    member do
+      get 'add'
+      post 'add', to: 'products#add', as: :add_to_cart
+      # get 'add', as: :add_to_cart
+    end
+    # concerns :recordable, only: :add, as: :add_to_cart
+  end
+
   devise_for :users
   root 'products#index'
   # The priority is based upon order of creation: first created -> highest priority.
