@@ -2,9 +2,8 @@ Rails.application.routes.draw do
   resources :brands
   resources :products do
     member do
-      get 'add'
       post 'add', to: 'products#add', as: :add_to_cart
-      # get 'add', as: :add_to_cart
+      post 'remove', to: 'products#remove', as: :remove_to_cart
     end
     # concerns :recordable, only: :add, as: :add_to_cart
   end

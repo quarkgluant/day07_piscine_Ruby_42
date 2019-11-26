@@ -1,9 +1,4 @@
-class CartItem
-  include ActiveModel::Model
-  # belongs_to :cart
-  attr_accessor :product, :quantity
-
-  def initialize
-    self.quantity = 0
-  end
+class CartItem < ActiveRecord::Base
+  belongs_to :product
+  belongs_to :cart
 end

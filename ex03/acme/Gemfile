@@ -19,11 +19,11 @@ gem 'pry-remote', group: :development
 gem 'pry-stack_explorer', group: :development
 gem 'puma'
 gem 'quiet_assets', group: :development
-gem 'rails', '4.2.7'
+gem 'rails', '4.2.11.1'
 gem 'rails_12factor', group: :production
 gem 'rails_admin'
 gem 'rolify'
-gem 'rubycritic', :require => false
+gem 'rubycritic', require: false
 gem 'sass-rails', '~> 5.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'spring', group: :development
