@@ -15,22 +15,32 @@
       <th colspan="2"></th>
     </tr>
   </thead>
-
-  <tbody>
-      <% unless current_cart.nil? && current_cart.cart_items.empty? %>
-        <% current_cart.cart_items.each do |cart_item| %>
-          <tr>
-            <td><%= cart_item.product.name %></td>
-            <td><%= cart_item.product.price %></td>
-            <td><%= cart_item.quantity %></td>
-            <td><%= cart_item.quantity * cart_item.product.price%></td>
-            <td><%= button_to '+', add_to_cart_product_path(cart_item.product), class: 'btn btn-xs btn-primary' %></td>
-            <td><%= button_to '-', remove_to_cart_product_path(cart_item.product), class: 'btn btn-xs btn-primary' %></td>
-          </tr>
-        <% end %>
-    <% end %>
-  </tbody>
-</table>
-  <%= button_to "Vider le panier", remove_all_from_cart_products_path, data: {
-      confirm: "Êtes-vous sûr ?" }, class: "btn btn-danger" %>
+    <tbody>
+        <% unless current_cart.nil? && current_cart.cart_items.empty? %>
+          <% current_cart.cart_items.each do |cart_item| %>
+            <tr>
+              <td><%= cart_item.product.name %></td>
+              <td><%= cart_item.product.price %></td>
+              <td><%= cart_item.quantity %></td>
+              <td><%= cart_item.quantity * cart_item.product.price%></td>
+              <td><%= button_to '+', add_to_cart_product_path(cart_item.product), class: 'btn btn-xs btn-primary' %></td>
+              <td><%= button_to '-', remove_to_cart_product_path(cart_item.product), class: 'btn btn-xs btn-primary' %></td>
+            </tr>
+          <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="btn-group btn-group-justified">
+    <table>
+      <tr>
+        <th>
+          <%= button_to "Vider le panier", remove_all_from_cart_products_path, data: {
+              confirm: "Êtes-vous sûr ?" }, class: "btn btn-danger " %>
+        </th>
+        <th>
+          <%= button_to 'Checkout', checkout_products_path, class: "btn btn-primary" %>
+        </th>
+      </tr>
+    </table>
+  </div>
 </nav>

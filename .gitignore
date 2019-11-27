@@ -67,4 +67,5 @@ Supprimerait ex01/acme/coverage/
 Supprimerait ex02/acme/coverage/
 Supprimerait ex03/acme/coverage/
 **/acme/bin/
+**/bin/
 ex0[0-6]/acme/bin

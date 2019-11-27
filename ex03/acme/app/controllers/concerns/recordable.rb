@@ -29,4 +29,8 @@ module Recordable
     current_cart.remove_all
     redirect_to products_path, notice: 'Cart was successfully emptied.'
   end
+
+  def checkout
+    render partial: 'shared/checkout'
+  end
 end

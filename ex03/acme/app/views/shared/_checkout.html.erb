@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Acme</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<nav class="nav nav-nav nav-right">
+  <span>
+    <h3>
+      PANIER DE
+      <%= current_user.name.upcase if current_user %>
+    </h3>
+  </span>
+  <table class="container-fluid">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Unit Price</th>
+      <th>Quantity</th>
+      <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% unless current_cart.nil? && current_cart.cart_items.empty? %>
+      <% current_cart.cart_items.each do |cart_item| %>
+        <tr>
+          <td><%= cart_item.product.name %></td>
+          <td><%= cart_item.product.price %></td>
+          <td><%= cart_item.quantity %></td>
+          <td><%= cart_item.quantity * cart_item.product.price%></td>
+        </tr>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+  <div>
+    <h3>
+      Total: <%= current_cart.total_sum %>
+    </h3>
+  </div>
+  <div class="btn-group btn-group-justified">
+    <table>
+      <tr>
+        <th>
+          <%= button_to "Vider le panier", remove_all_from_cart_products_path, data: {
+              confirm: "Êtes-vous sûr ?" }, class: "btn btn-danger " %>
+        </th>
+        <th>
+          <%= link_to 'Retour à la liste des produits', root_path, class: "btn btn-primary" %>
+        </th>
+      </tr>
+    </table>
+  </div>
+</nav>

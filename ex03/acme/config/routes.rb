@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   resources :products do
     collection do
       post 'remove_all', to: 'products#remove_all', as: :remove_all_from_cart
+      post 'checkout', to: 'products#checkout', as: :checkout
     end
 
     member do
