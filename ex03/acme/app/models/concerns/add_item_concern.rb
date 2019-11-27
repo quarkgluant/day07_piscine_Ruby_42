@@ -1,27 +1,21 @@
 module AddItemConcern
-  def add_item(item)
-    puts '----------------------------------------------------------------'
-    puts "je suis bien dans add_item(#{item})"
-    # puts "current_cart: #{current_cart.inspect}"
-    puts "cart_items: #{cart_items.inspect}"
-    puts '----------------------------------------------------------------'
-    if cart_items.any? { |cart_item| cart_item.product == item.product }
-      puts '----------------------------------------------------------------'
-      puts "cart_items: #{cart_items}"
-      puts '----------------------------------------------------------------'
-
-      item.quantity += 1
+  def add_item(product)
+    new_item = cart_items.find_by(product: product)
+    if new_item
+      new_item.quantity += 1
     else 
-      cart_items << item
+      new_item = CartItem.new(product: product, cart: id)
     end
-    cart_items
+    new_item.save
   end
 
-  def remove_item(item)
-    if cart_items.any? { |cart_item| cart_item.product == item.product }
-      item.quantity -= 1
+  def remove_item(product)
+    new_item = cart_items.find_by(product: product)
+    if new_item.quantity > 0
+      new_item.quantity -= 1
+      new_item.save
     else 
-      cart_items.delete item
+      cart_items.delete new_item
     end
     cart_items
   end

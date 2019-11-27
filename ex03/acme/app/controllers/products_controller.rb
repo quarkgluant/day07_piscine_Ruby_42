@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
   include Recordable
   include CurrentCart
-  before_action :set_product, only: %i[show edit update destroy add]
+  before_action :set_product, only: %i[show edit update destroy add remove]
   before_action :current_cart, only: %i[index add remove]
 
   # GET /products
