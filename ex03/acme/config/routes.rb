@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   resources :brands
   resources :products do
+    collection do
+      post 'remove_all', to: 'products#remove_all', as: :remove_all_from_cart
+    end
+
     member do
       post 'add', to: 'products#add', as: :add_to_cart
       post 'remove', to: 'products#remove', as: :remove_to_cart

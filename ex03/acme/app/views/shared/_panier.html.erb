@@ -31,4 +31,6 @@
     <% end %>
   </tbody>
 </table>
+  <%= button_to "Vider le panier", remove_all_from_cart_products_path, data: {
+      confirm: "Êtes-vous sûr ?" }, class: "btn btn-danger" %>
 </nav>

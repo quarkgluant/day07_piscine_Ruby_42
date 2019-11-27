@@ -22,12 +22,11 @@ module Recordable
 
   def remove
     current_cart.remove_item @product
-    puts '*****************************************************************'
-    puts "params: #{params}"
-    puts "je suis bien dans remove (controllers/concerns/recordable avec (#{@product})"
-    puts "current_cart: #{current_cart.inspect}"
-    puts "cart_items: #{current_cart.cart_items.inspect}"
-    puts '*****************************************************************'
     redirect_to products_path, notice: 'Product was successfully deleted from cart.'
+  end
+
+  def remove_all
+    current_cart.remove_all
+    redirect_to products_path, notice: 'Cart was successfully emptied.'
   end
 end
