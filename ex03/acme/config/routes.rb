@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   resources :products do
     collection do
       post 'remove_all', to: 'products#remove_all', as: :remove_all_from_cart
-      post 'checkout', to: 'products#checkout', as: :checkout
     end
 
     member do
@@ -13,6 +12,7 @@ Rails.application.routes.draw do
     # concerns :recordable, only: :add, as: :add_to_cart
   end
 
+  post 'checkout', to: 'products#checkout', as: '/checkout'
   devise_for :users
   root 'products#index'
   # The priority is based upon order of creation: first created -> highest priority.
