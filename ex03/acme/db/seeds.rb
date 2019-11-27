@@ -10,7 +10,7 @@
 #              email:'admin@gmail.com',
 #              password:'password',
 #              password_confirmation: 'password')
-#
+
 # User.create!(bio: FFaker::HipsterIpsum.paragraph,
 #              name: 'moi',
 #              email:'pat@localhost',
