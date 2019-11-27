@@ -622,8 +622,8 @@ export CLOUDINARY_API_KEY=12345678913345
 ```
 ou vous lancez vos commandes ainsi (mais les variables ne seront conservées que durant la session)
 ```shell script
-export CLOUDINARY_API_SECRET=MaisSiCestMaVeritableCle
-export CLOUDINARY_API_KEY=12345678913345
+CLOUDINARY_API_SECRET=MaisSiCestMaVeritableCle
+CLOUDINARY_API_KEY=12345678913345
 rake db:migrate
 rails server
 ```
@@ -781,9 +781,14 @@ exemple avec le products
 On remarquera, pour faire zoli (!), l'utilisation de classes CSS de Bootstrap sur les 
 `link_to 'Titre', chemin, , class: 'btn btn-xs btn-primary'` ou `btn-danger` pour l'action delete, `btn-xs` bouton eXtra 
 Small pour avoir de petits boutons !  
+Petit rappel: `link_to` déclenche par défaut un `GET`, alors que `button_to` est associé par défaut à `POST`  
 
 5. Modification des `show.html.erb`  
 
 Bon, maintenant, vous pouvez le faire tout seul !  
 
 ## ex03
+
+  
+Mes références: le livre `Agile Web Development with Rails` et un site web en français [Hackademy Rails gestion du panier](https://hackademy.io/tutoriel-videos/rails-07-gestion-du-panier)  
+
