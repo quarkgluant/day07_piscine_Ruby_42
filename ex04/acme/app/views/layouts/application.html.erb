@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Acme</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<nav class="container-fluid">
+  <div class="col-lg-3">
+    <%= render 'shared/navigation' %>
+  </div>
+  <div class="col-lg-6">
+  </div>
+  <div class="col-lg-3">
+    <%= render 'shared/panier' %>
+  </div>
+</nav>
+<div>
+  <p class="notice"><%= notice %></p>
+  <p class="alert"><%= alert %></p>
+</div>
+
+<div class="container-fluid">
+  <%= yield %>
+</div>
+
+
+</body>
+</html>

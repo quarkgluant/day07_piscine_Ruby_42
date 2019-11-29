@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Products</h1>
+
+<table class="container-fluid">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Brand</th>
+      <th>Pict</th>
+      <th>Price</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td><%= product.name %></td>
+        <td><%= product.description %></td>
+        <td><%= product.brand.name %></td>
+        <td><%= image_tag(product.pict_url(:thumb)) unless product.pict.file.nil? %></td>
+        <td><%= product.price %></td>
+        <td><%= link_to 'Détails', product, class: 'btn btn-xs btn-primary' %></td>
+        <td><%= link_to 'Modifier', edit_product_path(product), class: 'btn btn-xs btn-primary' %></td>
+        <td><%= link_to 'Enlever', product, method: :delete, class: 'btn btn-xs btn-danger', data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Ajouter au panier', add_to_cart_product_path(product), method: :post, class: 'btn btn-xs btn-primary' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= button_to 'New Product', new_product_path, class: 'btn btn-primary' %>
+<%= link_to 'Brands', brands_path, class: 'btn btn-primary' %>
