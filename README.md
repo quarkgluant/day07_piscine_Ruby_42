@@ -849,7 +849,7 @@ class ProductsController < ApplicationController
  # etc
 end 
 ```
-Un autre pour les modèles:  
+Un autre pour les modèles, à inclure dans le modèle Cart:  
 ```ruby
 # acme/models/concerns/add_item_concern.rb
 module AddItemConcern
