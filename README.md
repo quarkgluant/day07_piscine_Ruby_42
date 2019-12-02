@@ -792,6 +792,101 @@ Bon, maintenant, vous pouvez le faire tout seul !
 Mes références: le livre `Agile Web Development with Rails` et un site web en français [Hackademy Rails gestion du panier](https://hackademy.io/tutoriel-videos/rails-07-gestion-du-panier)
 , [un article de Medium sur les Single Table Inheritance](https://medium.com/@dcordz/single-table-inheritance-using-rails-5-02-6738bdd5101a)
 
+Donc un premier concern pour les contrôleurs, nommé `recordable.rb` :
+```ruby
+# acme/controllers/concerns/recordable.rb
+module Recordable
+  extend ActiveSupport::Concern
+
+  def add
+    current_cart.add_item @product
+    # puts '*****************************************************************'
+    # puts "params: #{params}"
+    # puts "je suis bien dans add avec (#{@product})"
+    # puts "current_cart: #{current_cart.inspect}"
+    # puts "cart_items: #{current_cart.cart_items.inspect}"
+    # puts '*****************************************************************'
+
+    # render partial: 'shared/panier', locals: { cart: current_cart } # , notice: 'Product was successfully added to cart.'
+    redirect_to products_path, notice: 'Product was successfully added to cart.'
+  end
+
+  def remove
+    current_cart.remove_item @product
+    redirect_to products_path, notice: 'Product was successfully deleted from cart.'
+  end
+
+  def remove_all
+    current_cart.remove_all
+    redirect_to products_path, notice: 'Cart was successfully emptied.'
+  end
+
+  def checkout
+    render partial: 'shared/checkout'
+  end
+end
+```  
+un second pour la `current_cart`:  
+```ruby
+module CurrentCart
+  private
+
+  def current_cart
+    @cart = Cart.find_by(id: session[:cart_id]) || Cart.create
+    session[:cart_id] ||= @cart.id
+    @cart
+  end
+end
+```
+Un autre pour les modèles:  
+```ruby
+# acme/models/concerns/add_item_concern.rb
+module AddItemConcern
+  def add_item(product)
+    new_item = cart_items.find_by(product: product)
+    if new_item
+      new_item.quantity += 1
+    else
+      new_item = CartItem.new(product: product, cart_id: id)
+    end
+    new_item.save
+  end
+
+  def remove_item(product)
+    new_item = cart_items.find_by(product: product)
+    if new_item.quantity > 1
+      new_item.quantity -= 1
+      new_item.save
+    else
+      cart_items.delete new_item
+    end
+    cart_items
+  end
+
+  def remove_all
+    cart_items.each do |cart_item|
+      cart_items.delete cart_item
+    end
+  end
+end
+```
+
+On n'oublie pas de créer les routes correspondantes :
+```ruby
+# extrait de acme/config/routes.rb
+  resources :products do
+    collection do
+      post 'remove_all', to: 'products#remove_all', as: :remove_all_from_cart
+    end
+
+    member do
+      post 'add', to: 'products#add', as: :add_to_cart
+      post 'remove', to: 'products#remove', as: :remove_to_cart
+    end
+  end
+
+  post 'checkout', to: 'products#checkout', as: '/checkout' 
+```
 ## ex04  
 
 Bon, ben là, pas grand chose à faire, la gem est déjà dans le Gemfile, il suffit juste de décommenter 4 lignes dans `acme/config/initializers/rails_admin.rb`  
@@ -810,6 +905,13 @@ et de créer un lien vers le dashboard:
         <%= link_to 'admin', rails_admin_path, class: 'btn btn-xs btn-primary' %>
       </span>
 ```  
+
+J'ai rajouté dans config/routes.rb ceci, est-ce vraiment utile, à vous de le tester !
+```ruby
+  # extrait de acme/config/routes.rb
+   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+ 
+```
 
 Et hop, le tour est joué !  
   
