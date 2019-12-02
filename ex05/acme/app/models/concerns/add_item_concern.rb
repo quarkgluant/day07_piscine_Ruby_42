@@ -3,7 +3,7 @@ module AddItemConcern
     new_item = cart_items.find_by(product: product)
     if new_item
       new_item.quantity += 1
-    else 
+    else
       new_item = CartItem.new(product: product, cart_id: id)
     end
     new_item.save
@@ -14,7 +14,7 @@ module AddItemConcern
     if new_item.quantity > 1
       new_item.quantity -= 1
       new_item.save
-    else 
+    else
       cart_items.delete new_item
     end
     cart_items

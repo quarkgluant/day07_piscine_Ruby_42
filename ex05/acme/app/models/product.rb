@@ -3,7 +3,7 @@ class Product < ActiveRecord::Base
   accepts_nested_attributes_for :brand
   mount_uploader :pict, PictUploader
   has_many :cart_items, dependent: :nullify
-
+  resourcify
   before_destroy :ensure_not_referenced_by_any_cart_item
 
   private

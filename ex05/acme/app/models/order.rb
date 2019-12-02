@@ -1,11 +1,11 @@
-class Order
-  include ActiveModel::Model
-  attr_accessor :order_item, :id
+class Order < Cart
+  include AddItemConcern
+  has_many :order_items, dependent: :destroy
+  resourcify
 
-  @@order_id ||= 0
-
-  def initialize()
-    @@order_id += 1
-    self.id = @@order_id
+  def total_sum
+    cart_items.pluck(:quantity, :product_id).inject(BigDecimal(0)) do |total, (q, p)|
+      total + (BigDecimal(q) * Product.find(p).price)
+    end
   end
 end

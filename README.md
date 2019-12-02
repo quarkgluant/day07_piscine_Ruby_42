@@ -788,7 +788,18 @@ Petit rappel: `link_to` déclenche par défaut un `GET`, alors que `button_to` e
 Bon, maintenant, vous pouvez le faire tout seul !  
 
 ## ex03
-
   
-Mes références: le livre `Agile Web Development with Rails` et un site web en français [Hackademy Rails gestion du panier](https://hackademy.io/tutoriel-videos/rails-07-gestion-du-panier)  
+Mes références: le livre `Agile Web Development with Rails` et un site web en français [Hackademy Rails gestion du panier](https://hackademy.io/tutoriel-videos/rails-07-gestion-du-panier)
+, [un article de Medium sur les Single Table Inheritance](https://medium.com/@dcordz/single-table-inheritance-using-rails-5-02-6738bdd5101a)
 
+## ex04  
+
+## ex05
+[doc sur cancancan et rails_admin](https://github.com/sferik/rails_admin/wiki/CanCanCan)
+
+```ruby
+  # dans application_controller.rb
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to main_app.root_url, alert: exception.message
+  end
+```

@@ -3,6 +3,7 @@ class ProductsController < ApplicationController
   include CurrentCart
   before_action :set_product, only: %i[show edit update destroy add remove]
   before_action :current_cart, only: %i[index add remove]
+  load_and_authorize_resource
 
   # GET /products
   # GET /products.json

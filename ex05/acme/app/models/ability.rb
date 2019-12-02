@@ -7,10 +7,22 @@ class Ability
     # Define abilities for the passed in user here. For example:
     #
     user ||= User.new # guest user (not logged in)
-    if user.admin?
+
+    # grâce à gem Rolify, on cherche les rôles de l'utilisateur
+    if user.has_role? :admin
+      # Et là, on lui donne les permissions souhaitées
       can :manage, :all
+      if user.admin?
+        can :access, :rails_admin   # grant access to rails_admin
+        can :read, :dashboard       # grant access to the dashboard
+      end
+    elsif user.has_role? :mod
+      can :manage, [Brand, Product]
     else
-      can :read, :all
+      can %i[read add remove remove_all checkout], Product
+      can :read, Brand
+      can :read, User
+      can :manage, [Cart, CartItem]
     end
     #
     # The first argument to `can` is the action you are giving the user

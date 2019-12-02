@@ -7,4 +7,8 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 6 }, on: :create
   validates :name, presence: true, on: :create
   validates :email, presence: true, on: :create
+
+  def admin?
+    name.casecmp 'admin' || role == 'admin'
+  end
 end

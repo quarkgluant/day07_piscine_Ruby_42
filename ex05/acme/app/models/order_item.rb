@@ -1,5 +1,3 @@
-class OrderItem
-  include ActiveModel::Model
-  # belongs_to :order
-  attr_accessor :product, :quantity
+class OrderItem < CartItem
+  belongs_to :order
 end
