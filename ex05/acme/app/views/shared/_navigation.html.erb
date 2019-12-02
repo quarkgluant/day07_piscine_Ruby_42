@@ -1,0 +1,26 @@
+<nav class="navbar navbar-default navbar-static-side" role="navigation">
+  <div class="navbar-header nav navbar-nav navbar-left">
+    <% if current_user %>
+      <h4>
+        <%= 'Welcome  ' + current_user.name %>
+      </h4>
+      <span>
+        <%= link_to 'Log out', destroy_user_session_path, class: 'btn btn-xs btn-danger', method: :delete %>
+      </span>
+      <span>
+        <%= link_to 'admin', rails_admin_path, class: 'btn btn-xs btn-primary' %>
+      </span>
+      <% else %>
+      <span>
+        <%= 'Vous devez être enregistré et logué pour poursuivre' %>
+      </span>
+      <span>
+        <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-xs btn-primary' %>
+      </span>
+      <span>
+        <%= link_to 'Sign In', new_user_session_path, class: 'btn btn-xs btn-primary' %>
+      </span>
+    <% end %>
+  </div>
+</nav>
+
