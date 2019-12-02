@@ -838,6 +838,17 @@ module CurrentCart
   end
 end
 ```
+Bien entendu, on n'oublie pas de les inclure là où il faut, par exemple pour les contrôleurs
+```ruby
+class ProductsController < ApplicationController
+  include Recordable
+  include CurrentCart
+  before_action :set_product, only: %i[show edit update destroy add remove]
+  before_action :current_cart, only: %i[index add remove]
+ #
+ # etc
+end 
+```
 Un autre pour les modèles:  
 ```ruby
 # acme/models/concerns/add_item_concern.rb
@@ -887,6 +898,57 @@ On n'oublie pas de créer les routes correspondantes :
 
   post 'checkout', to: 'products#checkout', as: '/checkout' 
 ```
+
+Et on affiche tout ça, avec par exemple un partial, nommé, soyons fou, `_panier.html.erb`
+```html+erb
+<nav class="nav nav-nav nav-right">
+  <span>
+    <h3>
+      PANIER DE
+      <%= current_user.name.upcase if current_user %>
+    </h3>
+  </span>
+  <table class="container-fluid">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Unit Price</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th colspan="2"></th>
+    </tr>
+  </thead>
+    <tbody>
+        <% unless current_cart.nil? && current_cart.cart_items.empty? %>
+          <% current_cart.cart_items.each do |cart_item| %>
+            <tr>
+              <td><%= cart_item.product.name %></td>
+              <td><%= cart_item.product.price %></td>
+              <td><%= cart_item.quantity %></td>
+              <td><%= cart_item.quantity * cart_item.product.price %></td>
+              <td><%= button_to '+', add_to_cart_product_path(cart_item.product), class: 'btn btn-xs btn-primary' %></td>
+              <td><%= button_to '-', remove_to_cart_product_path(cart_item.product), class: 'btn btn-xs btn-primary' %></td>
+            </tr>
+          <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="btn-group btn-group-justified">
+    <table>
+      <tr>
+        <th>
+          <%= button_to "Vider le panier", remove_all_from_cart_products_path, data: {
+              confirm: "Êtes-vous sûr ?" }, class: "btn btn-danger " %>
+        </th>
+        <th>
+          <%= button_to 'Checkout', checkout_path, class: "btn btn-primary" %>
+        </th>
+      </tr>
+    </table>
+  </div>
+</nav>
+```
+
 ## ex04  
 
 Bon, ben là, pas grand chose à faire, la gem est déjà dans le Gemfile, il suffit juste de décommenter 4 lignes dans `acme/config/initializers/rails_admin.rb`  
