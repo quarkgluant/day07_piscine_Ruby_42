@@ -795,7 +795,25 @@ ou encore, cette série d'articles de blog sur les [Single Table Inheritance (ST
 
 Pourquoi de la doc sur les STI ? Car Cart et Order se ressemblent, vous ne trouvez pas ? De même que CartItem et OrderItem...  
 
+On commence par créer deux migrations pour Cart et CartItem:
+```shell script
+rails g model Cart
+rails g model CartItem product:references cart:belongs_to quantity:integer
+rails g migration add_type_to_cart type:string 
+rails g migration add_type_to_cart_items type:string 
+```
+>à noter que `belongs_to` est juste un alias de `references`  
 
+On édite la seconde migration pour rajouter `default: 1` à quantity, et les deux dernières en rajoutant respectivement 
+`default: 'Cart'` et `default: 'CartItem'` puis les modèles pour terminer les associations. Dans 
+le modèle Cart, on rajoute `has_many :cart_items, dependent: :destroy` et on vérifie les associations pour CartItem:  
+
+```ruby
+class CartItem < ActiveRecord::Base
+  belongs_to :product
+  belongs_to :cart
+end
+```
 Donc un premier concern pour les contrôleurs, nommé `recordable.rb` :
 ```ruby
 # acme/controllers/concerns/recordable.rb
