@@ -794,6 +794,25 @@ Mes références: le livre `Agile Web Development with Rails` et un site web en 
 
 ## ex04  
 
+Bon, ben là, pas grand chose à faire, la gem est déjà dans le Gemfile, il suffit juste de décommenter 4 lignes dans `acme/config/initializers/rails_admin.rb`  
+
+```ruby
+# extrait de acme/config/initializers/rails_admin.rb 
+  config.authenticate_with do
+    warden.authenticate! scope: :user
+  end
+  config.current_user_method(&:current_user)
+```
+et de créer un lien vers le dashboard:  
+```html+erb
+      <!-- extrait de acme/app/views/shared/_navigation.html.erb -->
+      <span>
+        <%= link_to 'admin', rails_admin_path, class: 'btn btn-xs btn-primary' %>
+      </span>
+```  
+
+Et hop, le tour est joué !  
+  
 ## ex05
 [doc sur cancancan et rails_admin](https://github.com/sferik/rails_admin/wiki/CanCanCan)
 

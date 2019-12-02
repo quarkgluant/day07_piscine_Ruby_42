@@ -22,7 +22,7 @@
               <td><%= cart_item.product.name %></td>
               <td><%= cart_item.product.price %></td>
               <td><%= cart_item.quantity %></td>
-              <td><%= cart_item.quantity * cart_item.product.price%></td>
+              <td><%= cart_item.quantity * cart_item.product.price %></td>
               <td><%= button_to '+', add_to_cart_product_path(cart_item.product), class: 'btn btn-xs btn-primary' %></td>
               <td><%= button_to '-', remove_to_cart_product_path(cart_item.product), class: 'btn btn-xs btn-primary' %></td>
             </tr>
