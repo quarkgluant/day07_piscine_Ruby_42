@@ -949,9 +949,21 @@ Et on affiche tout ça, avec par exemple un partial, nommé, soyons fou, `_panie
 </nav>
 ```
 
+Sans oublier de rajouter une ligne dans la boucle each d'affichage de l'index des Product:
+```html+erb
+ <!-- extrait de acme/views/products/index.html.erb -->
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <!-- etc -->
+        <td><%= link_to 'Ajouter au panier', add_to_cart_product_path(product), method: :post, class: 'btn btn-xs btn-primary' %></td>
+      </tr>
+```
+
 ## ex04  
 
-Bon, ben là, pas grand chose à faire, la gem est déjà dans le Gemfile, il suffit juste de décommenter 4 lignes dans `acme/config/initializers/rails_admin.rb`  
+Bon, ben là, pas grand chose à faire, la gem est déjà dans le Gemfile, il suffit juste de décommenter 4 lignes dans 
+`acme/config/initializers/rails_admin.rb`  
 
 ```ruby
 # extrait de acme/config/initializers/rails_admin.rb 
