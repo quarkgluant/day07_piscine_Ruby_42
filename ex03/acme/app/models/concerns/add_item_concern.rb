@@ -16,13 +16,13 @@ module AddItemConcern
       new_item.save
     else 
       cart_items.delete new_item
+
+  def remove_item(item)
+    if cart_items.any? { |cart_item| cart_item.product == item.product }
+      item.quantity -= 1
+    else 
+      cart_items.delete item
     end
     cart_items
-  end
-
-  def remove_all
-    cart_items.each do |cart_item|
-      cart_items.delete cart_item
-    end
   end
 end
