@@ -791,6 +791,10 @@ Bon, maintenant, vous pouvez le faire tout seul !
   
 Mes références: le livre `Agile Web Development with Rails` et un site web en français [Hackademy Rails gestion du panier](https://hackademy.io/tutoriel-videos/rails-07-gestion-du-panier)
 , [un article de Medium sur les Single Table Inheritance](https://medium.com/@dcordz/single-table-inheritance-using-rails-5-02-6738bdd5101a)
+ou encore, cette série d'articles de blog sur les [Single Table Inheritance (STI)](https://devblast.com/b/single-table-inheritance-with-rails-4-part-1)  
+
+Pourquoi de la doc sur les STI ? Car Cart et Order se ressemblent, vous ne trouvez pas ? De même que CartItem et OrderItem...  
+
 
 Donc un premier concern pour les contrôleurs, nommé `recordable.rb` :
 ```ruby
