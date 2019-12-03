@@ -16,6 +16,9 @@ module AddItemConcern
       new_item.save
     else 
       cart_items.delete new_item
+    end
+    cart_items
+  end
 
   def remove_item(item)
     if cart_items.any? { |cart_item| cart_item.product == item.product }
