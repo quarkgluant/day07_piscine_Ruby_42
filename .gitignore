@@ -63,12 +63,11 @@ build-iPhoneSimulator/
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
 
-Supprimerait ex01/acme/coverage/
-Supprimerait ex02/acme/coverage/
-Supprimerait ex03/acme/coverage/
-**/acme/bin/
-**/bin/
-ex0[0-6]/acme/bin/
-Supprimerait ex04/acme/coverage/
-/ex01/acme/bin/
-/ex03/acme/bin/
+ex01/acme/coverage/
+ex02/acme/coverage/
+ex03/acme/coverage/
+ex04/acme/coverage/
+ex05/acme/coverage/
+
+
+

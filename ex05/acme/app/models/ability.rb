@@ -22,7 +22,7 @@ class Ability
       can %i[read add remove remove_all checkout], Product
       can :read, Brand
       can :read, User
-      can :manage,  [Cart, CartItem, Order, OrderItem]
+      can :manage, [Cart, CartItem, Order, OrderItem]
     end
     #
     # The first argument to `can` is the action you are giving the user
