@@ -510,7 +510,7 @@ Puisqu'on utilise les `nested_attributes`, il faut modifier les `strong_paramete
 `brand_attributes`, et, tant qu'on y est, on rajoute aussi la version cache de pict et d'avatar (qui sert à stocker en 
 cache l'image téléchargée en cas de rafraîchissement ou de non validation de la page)    
 ```ruby
-  # extrait de acme/controllers/products_controller.rb
+  # extrait de acme/app/controllers/products_controller.rb
   # Never trust parameters from the scary internet, only allow the white list through.
   def product_params
     params.require(:product).permit(:name, :description, :brand_id, :pict, :price,
@@ -532,7 +532,7 @@ ex.) **ET** modifier le Gemfile en rajoutant la gem minimagik
 gem 'mini_magick'
 ```                                     
 ```ruby
-# ex02/acme/uploaders/avatar_uploader.rb
+# ex02/acme/app/uploaders/avatar_uploader.rb
 class AvatarUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
@@ -579,7 +579,7 @@ end
 Dernière modif, pour que l'affichage des Products soit joli, on modifie 2 lignes, l'une pour afficher le nom de la marque
 (Brand) et l'autre pour afficher la photo réduite, la miniature (thumb) de chaque Product  
 ```html+erb
-<!-- # ex01/acme/views/products.html.erb (extrait) -->
+<!-- # ex01/acme/app/views/products.html.erb (extrait) -->
 <!--# avant : -->
          <td><%= product.brand %></td>
          <td><%= product.pict %></td>
@@ -817,7 +817,7 @@ end
 ```
 Donc un premier concern pour les contrôleurs, nommé `recordable.rb` :
 ```ruby
-# acme/controllers/concerns/recordable.rb
+# acme/app/controllers/concerns/recordable.rb
 module Recordable
   extend ActiveSupport::Concern
 
@@ -874,7 +874,7 @@ end
 ```
 Un autre pour les modèles, à inclure dans le modèle Cart:  
 ```ruby
-# acme/models/concerns/add_item_concern.rb
+# acme/app/models/concerns/add_item_concern.rb
 module AddItemConcern
   def add_item(product)
     new_item = cart_items.find_by(product: product)
@@ -974,7 +974,7 @@ Et on affiche tout ça, avec par exemple un partial, nommé, soyons fou, `_panie
 
 Sans oublier de rajouter une ligne dans la boucle each d'affichage de l'index des Product:
 ```html+erb
- <!-- extrait de acme/views/products/index.html.erb -->
+ <!-- extrait de acme/app/views/products/index.html.erb -->
   <tbody>
     <% @products.each do |product| %>
       <tr>

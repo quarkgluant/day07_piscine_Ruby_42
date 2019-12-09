@@ -19,10 +19,4 @@ module AddItemConcern
     end
     cart_items
   end
-
-  def remove_all
-    cart_items.each do |cart_item|
-      cart_items.delete cart_item
-    end
-  end
 end

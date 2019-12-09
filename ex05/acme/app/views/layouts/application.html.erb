@@ -14,7 +14,7 @@
   <div class="col-lg-6">
   </div>
   <div class="col-lg-3">
-    <%= render 'shared/panier' %>
+    <%= render 'shared/panier' if @cart&.cart_items&.any? %>
   </div>
 </nav>
 <div>
